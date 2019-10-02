@@ -36,6 +36,10 @@
         </p>
       {% endunless %}
     {% endform %}
+<!-- Begin ReCharge code -->
+{% include 'subscription-account-login' %}
+<!-- End ReCharge code -->
+
 
     {% if shop.checkout.guest_login %}
       <span class="or"> {{ 'customer.login.or' | t }} </span>

@@ -114,9 +114,6 @@
   {% endif %}
   {% assign cart_collections = '' | split: ',' %}
   {% for cart_collection in all_cart_collections %}
-    {%- comment %}<locksmith:824d>{% endcomment -%}
-      {%- include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: cart_collection %}{% if locksmith_transparent %}{% else %}{% continue %}{% endif -%}
-    {%- comment %}</locksmith:824d>{% endcomment -%}
     {% assign cart_collection_json = '' | split: ',' %}
     {% for collection_field_name in needed_collection_fields_names %}
       {% assign collection_field_value = cart_collection[collection_field_name] | json %}

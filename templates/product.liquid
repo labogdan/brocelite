@@ -106,28 +106,38 @@
       {% endif %}
 
       {% unless collection_handles contains 'coming-soon' %}
-        <p class="modal_price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-          <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
-          <meta itemprop="seller" content="{{ shop.name | escape }}" />
-          <link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
-          <meta itemprop="itemCondition" content="New" />
-          <span class="sold_out">{% if variant.available == false %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
-          <span itemprop="price" content="{{ bold_variant_price | money_without_currency }}" class="{% if variant.compare_at_price > bold_variant_price %}sale{% endif %}">
-            <span class="current_price {% if product.available == false %}hidden{% endif %}">
-              {% if bold_variant_price > 0 %}
-                {{ bold_variant_price | money }}
-              {% else %}
-                {{ settings.free_price_text }}
+        <div class="columns">
+          <div class="column">
+            <p class="modal_price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+              <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
+              <meta itemprop="seller" content="{{ shop.name | escape }}" />
+              <link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+              <meta itemprop="itemCondition" content="New" />
+              <span class="sold_out">{% if variant.available == false %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
+              <span itemprop="price" content="{{ bold_variant_price | money_without_currency }}" class="{% if variant.compare_at_price > bold_variant_price %}sale{% endif %}">
+                <span class="current_price {% if product.available == false %}hidden{% endif %}">
+                  {% if bold_variant_price > 0 %}
+                    {{ bold_variant_price | money }}
+                  {% else %}
+                    {{ settings.free_price_text }}
+                  {% endif %}
+                </span>
+              </span>
+              <span class="was_price">
+              {% if bold_variant_price < variant.compare_at_price and variant.available %}
+                {{ variant.compare_at_price | money }}
               {% endif %}
-            </span>
-          </span>
-          <span class="was_price">
-          {% if bold_variant_price < variant.compare_at_price and variant.available %}
-            {{ variant.compare_at_price | money }}
-          {% endif %}
-          </span>
-        </p>
-
+              </span>
+            </p>
+          </div>
+          <div class="column is-8">
+            {% if product.id == 1815504158769 %}
+              <p class="green-uppercase">Want the 60 capsule size instead? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button class="button is-link is-small" onclick="window.location.href='/collections/shop/products/brocelite-plus'">Shop Now</button></p>
+            {% elsif product.id == 1491651362865 %}
+              <p class="green-uppercase">Want the 30 capsule size instead? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button class="button is-link is-small" onclick="window.location.href='/collections/shop/products/brocelite-plus-30-capsule'">Shop Now</button></p>
+            {% endif %}
+          </div>
+        </div>
         {% include 'product-notify-me' %}
       {% endunless %}
 

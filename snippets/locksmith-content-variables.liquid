@@ -3,7 +3,7 @@
   fiddle with what's below, but your changes will be reset the next time that
   Locksmith interacts with your shop.
 
-  Last updated: Sat, 11 May 2019 23:17:31 +0000
+  Last updated: Mon, 02 Sep 2019 04:31:11 +0000
   Integration version: v5.34
 {% endcomment -%}
 
@@ -93,7 +93,7 @@
         <label for="customer_password" class="login">{{'customer.login.password'|t}}</label>
         <input type="password" value="" name="customer[password]" id="customer_password" class="large password" size="16" tabindex="2" />{%endif%}<input class="btn action_button" type="submit" value="{{'customer.login.sign_in'|t}}" style="margin-bottom: 5px !important" tabindex="3" />{%unless _9.checkout.guest_login%}<p class="right" style="padding-top: 10px;">
 {{'customer.login.new_customer_label'|t}}{{'customer.login.sign_up_html'|t|customer_register_link}}
-        </p>{%endunless%}<input type="hidden" id="login_checkout_url" name="checkout_url" value="" />{%endform%}{%if _9.checkout.guest_login%}<span class="or"> {{'customer.login.or'|t}} </span>{%form 'guest_login'%}<input class="guest_button" type="submit" value="{{'customer.login.guest_title_html'|t}}" />
+        </p>{%endunless%}<input type="hidden" id="login_checkout_url" name="checkout_url" value="" />{%endform%}<!-- Begin ReCharge code -->{%include 'subscription-account-login'%}<!-- End ReCharge code -->{%if _9.checkout.guest_login%}<span class="or"> {{'customer.login.or'|t}} </span>{%form 'guest_login'%}<input class="guest_button" type="submit" value="{{'customer.login.guest_title_html'|t}}" />
       <input type="hidden" id="login_checkout_url" name="checkout_url" value="" />{%endform%}{%endif%}</div>
   </div>
 
