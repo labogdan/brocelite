@@ -10,7 +10,7 @@
 <!--[if (gte IE 10)|!(IE)]><!--><html lang="{{ shop.locale }}"> <!--<![endif]-->
   <head>
 
-  {% include 'storakle' %}
+  {%comment%}{% include 'storakle' %}{%endcomment%}
     <meta charset="utf-8">
     <meta http-equiv="cleartype" content="on">
     <meta name="robots" content="index,follow">
@@ -42,6 +42,7 @@
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.4.1.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 
@@ -71,16 +72,16 @@
     {{ 'styles.scss.css' | asset_url | stylesheet_tag }}
     {{ 'flexslider.css' | asset_url | stylesheet_tag }}
     <link rel="shortcut icon" type="image/x-icon" href="{{ 'favicon.png' | asset_url }}">
-    
-          
+
+
 <!--MB_OPC-->
-<script>     
+<script>
         if(window.location.pathname=='/securecheckout'){
         document.title = 'Secure checkout';
-        var css = 'body > :not(#cartLoader) {display:none !important}',head = document.head || document.getElementsByTagName('head')[0],style = document.createElement('style');  
-        head.appendChild(style);style.appendChild(document.createTextNode(css));        
+        var css = 'body > :not(#cartLoader) {display:none !important}',head = document.head || document.getElementsByTagName('head')[0],style = document.createElement('style');
+        head.appendChild(style);style.appendChild(document.createTextNode(css));
         var svg = "<svg style='position:fixed;top:100px;left:50%;margin-left:-100px;' width='200px'  height='200px'  xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid' class='lds-rolling' style='background: none;'><circle cx='50' cy='50' fill='none' ng-attr-stroke='{{config.color}}' ng-attr-stroke-width='{{config.width}}' ng-attr-r='{{config.radius}}' ng-attr-stroke-dasharray='{{config.dasharray}}' stroke='#197bbd' stroke-width='2' r='15' stroke-dasharray='70.68583470577033 25.561944901923447' transform='rotate(243.197 50 50)'><animateTransform attributeName='transform' type='rotate' calcMode='linear' values='0 50 50;360 50 50' keyTimes='0;1' dur='1s' begin='0s' repeatCount='indefinite'></animateTransform></circle></svg>"
-        document.open();document.write("<!doctype ht"+"ml><ht"+"ml><bo"+"dy><div id='cartLoader' style='min-height:600px;width:100%;text-align:center;background-color: rgba(255, 255, 255, .5);position:absolute;z-index:9999999999'>"+svg+"</div></b"+"ody></ht"+"ml>");document.close();                
+        document.open();document.write("<!doctype ht"+"ml><ht"+"ml><bo"+"dy><div id='cartLoader' style='min-height:600px;width:100%;text-align:center;background-color: rgba(255, 255, 255, .5);position:absolute;z-index:9999999999'>"+svg+"</div></b"+"ody></ht"+"ml>");document.close();
         }
         var opcSettings = {enabled : true, design : 1, skipCart : false, oneClickBuy : false, customJsFile : '', customCssFile : '', btnSelector : '', enablePopup: false, popupHtml : "",popupBkg : '#ffffff'}
         var opcLang = {completeOrder : "Complete order", payment : "Payment", shippingMethod : "Shipping method", secureCheckout : "Secure Checkout", paymentNotice : "Please submit information in previous step to show payment methods",shippingNotice : "Please submit shipping information in previous step to show shipping methods"};
@@ -116,8 +117,8 @@
     <![endif]-->
 
     {{ content_for_header }}
-{%- include 'bold-common' -%}
-{%- include 'bold-product' with product, hide_action: 'header' -%}
+{%comment%}{%- include 'bold-common' -%}{%endcomment%}
+{%comment%}{%- include 'bold-product' with product, hide_action: 'header' -%}{%endcomment%}
   <script type='text/javascript'>var jiltStorefrontParams = {{ shop.metafields.jilt_storefront | json }}; {% if customer %}jiltStorefrontParams.customerID = {{ customer.id }};{% endif %}</script>
 
   <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/ScrollMagic.min.js"></script>
@@ -442,7 +443,7 @@
         {% endunless %}
 
         {% if template contains 'list-collections' %}
-          {% include 'collection-listing' %}
+          {%comment%}{% include 'collection-listing' %}{%endcomment%}
         {% else %}
           {{ content_for_layout }}
         {% endif %}

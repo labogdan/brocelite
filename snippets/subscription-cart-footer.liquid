@@ -1,7 +1,7 @@
 <!-- Subscriptions Powered by ReCharge Payments: Begin Liquid Code -->
 <!--
 	Subscription Cart Footer
-	http://rechargepayments.com: v3.0
+	http://rechargepayments.com: v3.1
 	Updated: 2019/04/29
 -->
 {% comment %}Subscriptions Powered by ReCharge Payments: Meta Fields{% endcomment %}
@@ -169,15 +169,17 @@
 
 			if (!attributes_filtered.length) { return {}; }
 
-			var data = {};
+			var attribute_data = {};
 
 			attributes_filtered.forEach(function(attribute) {
 				var name = attribute.getAttribute('name'),
 					value = attribute.value;
-				data[name] = value;
+				attribute_data[name] = value;
 			});
 
-			return data;
+			return {
+				attributes: attribute_data
+			};
 		}
 
 		function getCartData(customer) {
@@ -217,10 +219,14 @@
 					'form[action="/checkout"] input[type="submit"]',
 					'.checkout_button',
 				],
-				submit_buttons = document.querySelectorAll(submit_selectors.join(',')),
-				submit_buttons_to_update = Array.prototype.slice.apply(submit_buttons);
+				buttons = document.querySelectorAll(submit_selectors.join(',')),
+				all_buttons = Array.prototype.slice.apply(buttons),
+				submit_buttons = all_buttons.filter(function(elem) {
+					// Don't watch update buttons
+					return elem.name !== 'update';
+				});
 
-			return submit_buttons_to_update;
+			return submit_buttons;
 		}
 
 		function getOptions() {
@@ -243,8 +249,6 @@
 			form.style.display = 'none';
 
 			buildInputs(form, data);
-
-			document.body.appendChild(form);
 
 			return form;
 		}
@@ -272,67 +276,69 @@
 				}
 
 				var form = buildForm(cart_data, checkout_url);
-
+				document.body.appendChild(form);
 				form.submit();
 			};
 
 			xhr.send(JSON.stringify(cart_data));
 		}
+		if (!window.ReCharge) { window.ReCharge = {}; }
+		// Run JavaScript when document has loaded
+		ReCharge.cart_options = {
+				active: {{ shop.metafields.subscriptions.subscription_active | default: 'false' }},
+				money_format: {{ shop.money_format | json }},
+				permanent_domain: {{ shop.permanent_domain | json }},
+				checkout_domain: {{ shop.metafields.subscriptions.checkout_domain | default: 'checkout.rechargeapps.com' | json }},
+				has_subscriptions: {{ has_subscriptions }},
+				cart_currency: {{ cart.currency.iso_code | json }},
+				disable: false,
+			},
+			ReCharge.customer =  {
+				email: {{ customer.email | default: '' | json }},
+				default_address: {
+					{% if customer.default_address %}
+						first_name: {{ customer.default_address.first_name | json }},
+						last_name: {{ customer.default_address.last_name | json }},
+						address1: {{ customer.default_address.address1 | json }},
+						address2: {{ customer.default_address.address2 | json }},
+						city: {{ customer.default_address.city | json }},
+						company: {{ customer.default_address.company | json }},
+						country: {{ customer.default_address.country | json }},
+						province: {{ customer.default_address.province | json }},
+						phone: {{ customer.default_address.phone | json }},
+						zip: {{ customer.default_address.zip | json }}
+					{% endif %}
+				}
+			},
+			ReCharge.cart = {{ cart | default: '' | json }},
+			ReCharge.subscriptions = {
+				{% for item in cart.items %}
+					{% if item.product.metafields.subscriptions.original_handle %}
+						{{ item.id }}: {
+							url: {{ item.product.url | json }},
+							original_handle: {{ item.product.metafields.subscriptions.original_handle | json }}
+						},
+					{% endif %}
+				{% endfor %}
+			};
 
 		var reChargeCartJS = function() {
-			// Run JavaScript when document has loaded
-			var options = {
-					active: {{ shop.metafields.subscriptions.subscription_active | default: 'false' }},
-					money_format: {{ shop.money_format | json }},
-					permanent_domain: {{ shop.permanent_domain | json }},
-					checkout_domain: {{ shop.metafields.subscriptions.checkout_domain | default: 'checkout.rechargeapps.com' | json }},
-					has_subscriptions: {{ has_subscriptions }},
-					cart_currency: {{ cart.currency.iso_code | json }},
-					disable: false,
-				},
-				customer =  {
-					email: {{ customer.email | default: '' | json }},
-					default_address: {
-						{% if customer.default_address %}
-							first_name: {{ customer.default_address.first_name | json }},
-							last_name: {{ customer.default_address.last_name | json }},
-							address1: {{ customer.default_address.address1 | json }},
-							address2: {{ customer.default_address.address2 | json }},
-							city: {{ customer.default_address.city | json }},
-							company: {{ customer.default_address.company | json }},
-							country: {{ customer.default_address.country | json }},
-							province: {{ customer.default_address.province | json }},
-							phone: {{ customer.default_address.phone | json }},
-							zip: {{ customer.default_address.zip | json }}
-						{% endif %}
-					}
-				},
-				cart = {{ cart | default: '' | json }},
-				subscriptions = {
-					{% for item in cart.items %}
-						{% if item.product.metafields.subscriptions.original_handle %}
-							{{ item.id }}: {
-								url: {{ item.product.url | json }},
-								original_handle: {{ item.product.metafields.subscriptions.original_handle | json }}
-							},
-						{% endif %}
-					{% endfor %}
-				};
-
 			var submit_buttons = getSubmitButtons();
 
 			submit_buttons.forEach(function(button) {
 				button.addEventListener('click', function(evt) {
-					if (!options.disable && !evt.target.getAttribute('data-disable-recharge')) {
+					if (ReCharge.cart_options && !ReCharge.cart_options.disable && !evt.target.getAttribute('data-disable-recharge')) {
+                      	console.log('trigger!');
+                      	evt.stopPropagation();
 						evt.preventDefault();
-						cartSubmit(options, customer);
+						cartSubmit(ReCharge.cart_options, ReCharge.customer);
 					} else {
 						window.console.log('ReCharge was disabled intentionally.');
 					}
 				});
 			});
 
-			updateProductUrls(subscriptions);
+			updateProductUrls(ReCharge.subscriptions);
 			restoreCheckoutButton();
 		};
 
