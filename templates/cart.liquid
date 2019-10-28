@@ -1,5 +1,5 @@
-{% comment %} {%- include 'bold-cart' -%} {% endcomment %}
-
+{%- include 'bold-cart' -%}
+{% include 'subscription-cart-footer' %}
   <div class="sixteen columns clearfix collection_nav">
     <h1 class="center">{{ 'cart.general.title' | t }}</h1>
     <div class="feature_divider"></div>
@@ -25,7 +25,7 @@
         <h4 class="title">{{ 'cart.general.products' | t }}</h4>
 
         {% for item in cart.items %}
-{% comment %} {%- include 'bold-cart-item' with item -%} {% endcomment %}
+{%- include 'bold-cart-item' with item -%}
           <div class="five columns alpha">
             <a href="{{ item.url }}" title="{{ item.title | escape }}" class="cart_page_image">
               <img src="{{ 'loader.gif' | asset_url }}" data-src="{{ item | img_url: 'medium' }}" data-src-retina="{{ item | img_url: 'grande' }}" alt="{{ item.title | escape }}" />
@@ -142,4 +142,3 @@
   <br class="clear" />
   <br class="clear" />
 {% endif %}
-{% include 'subscription-cart-footer' %}

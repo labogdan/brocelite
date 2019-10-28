@@ -120,6 +120,8 @@ $(function() {
       }
     });
 
+    console.log("{{ settings.cart_action }}");
+
     {% if settings.cart_action == 'ajax' %}
       $('#cart').mmenu({
         offCanvas: { position: '{{ settings.side_cart_position }}', zposition : "front", pageSelector: "#content_wrapper" },
@@ -1584,16 +1586,12 @@ $(document).ready(function () {
 ]);*/
 
   /* quick hack to submit cart */
-/*$("body").on("click", "#checkout, #cart input[type='submit']", function() {
+$("body").on("click", "#checkout, #cart input[type='submit']", function() {
 console.log($(this));
 $("#cart").submit();
- });*/
-/*
- $("body").on("click", "input[type='submit'].action_button.right", function() {
-   console.log($(this));
-   $("#cart").submit();
  });
-*/
+
+
 
 var sticky = new Sticky(".header");
 
